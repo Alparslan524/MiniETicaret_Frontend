@@ -19,3 +19,6 @@ import { UiModule } from './ui/ui.module';
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+//Birden fazla component kullanacağımız zaman mesela Customer ile ilgili birden fazla component varsa bu componentlerin yönetimi 
+//Customer moduleden yapılacak
