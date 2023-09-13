@@ -12,7 +12,7 @@ export class LayoutComponent implements OnInit {
   message = "Alertify Çalışıyor!!";
   
   ngOnInit(): void {
-    //this.alertify.message(this.message, MessageType.Success, Position.TopRight,1,false);
-    this.alertify.message(this.message, { messageType: MessageType.Success, position: Position.TopRight, delay: 3, dismissOthers:false });
+    //this.alertify.message(this.message, MessageType.Success, Position.TopRight,1,false);//Eski parametre tipi
+    //this.alertify.message(this.message, { messageType: MessageType.Success, position: Position.TopRight, delay: 3, dismissOthers:false });//Doğru tip
   }
 }
