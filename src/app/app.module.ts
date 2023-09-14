@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BaseComponent } from './base/base.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -20,11 +21,17 @@ import { BaseComponent } from './base/base.component';
     AdminModule,UiModule, 
     BrowserAnimationsModule,//Export,import önemli
     ToastrModule.forRoot(),
-    NgxSpinnerModule//Bunu spinner kullanacağımız her yerde import etmemiz gerek. Ama uygulamanın ana modulesinde ve componentinde yazdık.
+    NgxSpinnerModule,//Bunu spinner kullanacağımız her yerde import etmemiz gerek. Ama uygulamanın ana modulesinde ve componentinde yazdık.
                     //Böylelikle her html dosyasında <ngx-spinner></ngx-spinner> yazmamıza gerek yok. Sadece kullanacağımız modulede ctor içine 
                     //NgxSpinnerService nesnesini oluşturarak .show ile gösterebilirizz
+    HttpClientModule
+  
+  
+  
   ],
-  providers: [],
+  providers: [
+    {provide: "baseUrl", useValue:"https://localhost:7032/api",multi:true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
