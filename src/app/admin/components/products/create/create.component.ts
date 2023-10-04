@@ -10,12 +10,12 @@ import { ProductService } from 'src/app/services/common/models/product.service';
   templateUrl: './create.component.html',
   styleUrls: ['./create.component.scss']
 })
-export class CreateComponent extends BaseComponent implements OnInit{
+export class CreateComponent extends BaseComponent implements OnInit {
 
-  constructor(spinner: NgxSpinnerService, private productService: ProductService, private alertify:AlertifyService) { 
+  constructor(spinner: NgxSpinnerService, private productService: ProductService, private alertify: AlertifyService) {
     super(spinner)
   }
-  
+
   ngOnInit(): void {
   }
 
@@ -26,13 +26,19 @@ export class CreateComponent extends BaseComponent implements OnInit{
     create_product.stock = parseInt(stock.value);
     create_product.price = parseFloat(price.value);
 
-    this.productService.create(create_product, ()=> {
+    this.productService.create(create_product, () => {
       this.hideSpinner(SpinnerType.LineScale);
-      this.alertify.message("Ürün Başarıyla Eklendi!",{
+      this.alertify.message("Ürün Başarıyla Eklendi!", {
         messageType: MessageType.Success,
         position: Position.TopRight
-      })
-    } );//successCallBack yani işlem başarıyla dönerse spinner hide edilecek, alertify ile mesaj verilecek.
+      })//successCallBack yani işlem başarıyla dönerse spinner hide edilecek, alertify ile mesaj verilecek.
+    },errorMessage => { //eğer errorCallBack ise hata vericek
+      this.alertify.message(errorMessage,{
+        dismissOthers:true,
+        messageType:MessageType.Error,
+        position:Position.TopRight
+      });
+    });
   }
 
 
