@@ -28,9 +28,11 @@ export class ProductService {
     });
   }
 
-  async read(successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<List_Product[]> {//21.Ders
-    const promiseData: Promise<List_Product[]> = this.httpClientService.get<List_Product[]>({
-      controller: "products"
+  //default olarak 0.sayfa 5 tane eleman.
+  async read(page: number = 0, size: number = 5, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<{ totalCount: number; products: List_Product[] }> {//21.Ders
+    const promiseData: Promise<{ totalCount: number; products: List_Product[] }> = this.httpClientService.get<{ totalCount: number; products: List_Product[] }>({
+      controller: "products",
+      queryString: `page=${page}&size=${size}`
     }).toPromise();
 
     promiseData.then(d => successCallBack()).catch((errorResponse: HttpErrorResponse) => errorCallBack(errorResponse.message));

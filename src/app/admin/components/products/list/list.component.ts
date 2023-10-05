@@ -24,19 +24,32 @@ export class ListComponent extends BaseComponent implements OnInit{
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   async ngOnInit() {
+    await this.getProducts();
+  }
+
+  async getProducts(){
     this.showSpinner(SpinnerType.SquareJellyBox);
-    const allProducts: List_Product[] = await this.productService.read(() => this.hideSpinner(SpinnerType.SquareJellyBox),
+    const allProducts: { totalCount: number; products: List_Product[] } = await this.productService.read(this.paginator ? this.paginator.pageIndex : 0,
+      this.paginator ? this.paginator.pageSize : 5,//paginator yok ise default değerler, var ise paginator değerleri
+      () => this.hideSpinner(SpinnerType.SquareJellyBox),//Success call back
       errorMessage => this.alertifyService.message(errorMessage, {
         dismissOthers: true,
         messageType: MessageType.Error,
         position: Position.TopRight
       }));
-      this.dataSource= new MatTableDataSource<List_Product>(allProducts);
+      this.dataSource= new MatTableDataSource<List_Product>(allProducts.products);
+      this.paginator.length=allProducts.totalCount;
       //Servisimizdeki read işlemi ile tüm productları okuyoruz, success dönerse spinneri kapatıyor, error dönerse hata mesajını alertify 
       //ile veriyor. Daha sonra dataSourceye bu verileri aktarıyor. Tabloyada data source dönülüyor
 
-      this.dataSource.paginator = this.paginator;//Sayfalama işlemi için alttaki paginator ile dataSourceyi birleştiriyoruz gibi
+
+
+
+      //this.dataSource.paginator = this.paginator;//Sayfalama işlemi için alttaki paginator ile dataSourceyi birleştiriyoruz gibi
   }
 
+  async pageChanged(){
+    await this.getProducts();
+  }
 
 }
