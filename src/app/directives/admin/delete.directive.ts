@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
 import { DeleteDialogComponent, DeleteState } from 'src/app/dialogs/delete-dialog/delete-dialog.component';
+import { HttpClientService } from 'src/app/services/common/http-client.service';
 import { ProductService } from 'src/app/services/common/models/product.service';
 
 declare var $: any
@@ -12,7 +13,7 @@ declare var $: any
 })
 export class DeleteDirective {
 
-  constructor(private element: ElementRef, private _renderer: Renderer2, private productService: ProductService,
+  constructor(private element: ElementRef, private _renderer: Renderer2, private httpClientService: HttpClientService,
     private spinner: NgxSpinnerService,
     public dialog: MatDialog
   ) {
@@ -27,6 +28,7 @@ export class DeleteDirective {
 
   @Input() id: number;
   @Output() callBack: EventEmitter<any> = new EventEmitter();//list.component.html e bak
+  @Input() controller: string;
 
   //Directivenin kullanıldığı nesneye ne zaman "click" edilirse aşağıdaki fonksiyon çalışacak. 
   //click yerine başka şeyler de yazabilirdik. Mesela cursor üzerine gelince vs
@@ -35,21 +37,21 @@ export class DeleteDirective {
     //Opendialog ile 300px lik uyarı penceresi açıldı. Düğmeye tıklandıktan sonra yani bildirim kapandıktan sonra
     //eğer gelen sonuç yes ise callback fonksiyonu afterClosed çalışacak. Yani aşağıdaki ()=> sonraki kodlar çalışacak. 
     //Eğer iptale tyıklanırsa Close çalışacak. Bunları delete-dialog.component.html den anlıyoruz
-    this.openDialog(async ()=>{
+    this.openDialog(async () => {
 
       //this.showSpinner(SpinnerType.SquareJellyBox); Bu şekilde yapmamız için bu directive Basecomponent'i extends etmesi lazım
-    //Ama bu solide aykırı. O yüzden direkt spinner üzerinden çalışma yaptık.
-    this.spinner.show(SpinnerType.SquareJellyBox);
+      //Ama bu solide aykırı. O yüzden direkt spinner üzerinden çalışma yaptık.
+      this.spinner.show(SpinnerType.SquareJellyBox);
 
-    const td: HTMLTableCellElement = this.element.nativeElement;//Tıklanılan tablo hücresini yakaladık.
-    await this.productService.delete(this.id);//Silme işlemi gerçekleşene kadar await sayesinde bekleyecek
-    $(td.parentElement).fadeOut(2000, () => {
-      this.callBack.emit();//Fadeout yani silme animasyonu bittikten sonra output ile yakaladığımız tablo güncelleme fonksiyonunu başlat.
+      const td: HTMLTableCellElement = this.element.nativeElement;//Tıklanılan tablo hücresini yakaladık.
+      this.httpClientService.delete({
+        controller: this.controller
+      }, this.id).subscribe(data => {
+        $(td.parentElement).fadeOut(2000, () => {
+          this.callBack.emit();//Fadeout yani silme animasyonu bittikten sonra output ile yakaladığımız tablo güncelleme fonksiyonunu başlat.
+        });
+      })
     });
-
-    }); 
-
-    
   }
 
   openDialog(afterClosed: any): void {
