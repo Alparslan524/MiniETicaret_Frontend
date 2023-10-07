@@ -1,6 +1,8 @@
 import { Directive, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
+import { DeleteDialogComponent, DeleteState } from 'src/app/dialogs/delete-dialog/delete-dialog.component';
 import { ProductService } from 'src/app/services/common/models/product.service';
 
 declare var $: any
@@ -8,9 +10,12 @@ declare var $: any
 @Directive({
   selector: '[appDelete]'
 })
-export class DeleteDirective{
+export class DeleteDirective {
 
-  constructor(private element: ElementRef, private _renderer: Renderer2, private productService: ProductService,private spinner: NgxSpinnerService) {
+  constructor(private element: ElementRef, private _renderer: Renderer2, private productService: ProductService,
+    private spinner: NgxSpinnerService,
+    public dialog: MatDialog
+  ) {
     //Bu directiveyi çağıran yerlerde aşağıdaki kodlar çalışacak
     const img = _renderer.createElement("img");
     img.setAttribute("src", "../../../../../assets/delete.png");
@@ -27,15 +32,40 @@ export class DeleteDirective{
   //click yerine başka şeyler de yazabilirdik. Mesela cursor üzerine gelince vs
   @HostListener("click")
   async onclick() {
-    //this.showSpinner(SpinnerType.SquareJellyBox); Bu şekilde yapmamız için bu directive Basecomponent'i extends etmesi lazım
+    //Opendialog ile 300px lik uyarı penceresi açıldı. Düğmeye tıklandıktan sonra yani bildirim kapandıktan sonra
+    //eğer gelen sonuç yes ise callback fonksiyonu afterClosed çalışacak. Yani aşağıdaki ()=> sonraki kodlar çalışacak. 
+    //Eğer iptale tyıklanırsa Close çalışacak. Bunları delete-dialog.component.html den anlıyoruz
+    this.openDialog(async ()=>{
+
+      //this.showSpinner(SpinnerType.SquareJellyBox); Bu şekilde yapmamız için bu directive Basecomponent'i extends etmesi lazım
     //Ama bu solide aykırı. O yüzden direkt spinner üzerinden çalışma yaptık.
     this.spinner.show(SpinnerType.SquareJellyBox);
-    
+
     const td: HTMLTableCellElement = this.element.nativeElement;//Tıklanılan tablo hücresini yakaladık.
     await this.productService.delete(this.id);//Silme işlemi gerçekleşene kadar await sayesinde bekleyecek
     $(td.parentElement).fadeOut(2000, () => {
       this.callBack.emit();//Fadeout yani silme animasyonu bittikten sonra output ile yakaladığımız tablo güncelleme fonksiyonunu başlat.
     });
+
+    }); 
+
+    
   }
 
+  openDialog(afterClosed: any): void {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      width: '300px',
+      data: DeleteState.Yes
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == DeleteState.Yes) {
+        afterClosed();
+      }
+    });
+  }
+
+
+
 }
+
