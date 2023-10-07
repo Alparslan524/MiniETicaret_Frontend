@@ -1,10 +1,11 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Directive, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
+import { SpinnerType } from 'src/app/base/base.component';
 import { DeleteDialogComponent, DeleteState } from 'src/app/dialogs/delete-dialog/delete-dialog.component';
+import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { HttpClientService } from 'src/app/services/common/http-client.service';
-import { ProductService } from 'src/app/services/common/models/product.service';
 
 declare var $: any
 
@@ -15,7 +16,8 @@ export class DeleteDirective {
 
   constructor(private element: ElementRef, private _renderer: Renderer2, private httpClientService: HttpClientService,
     private spinner: NgxSpinnerService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private alertify: AlertifyService
   ) {
     //Bu directiveyi çağıran yerlerde aşağıdaki kodlar çalışacak
     const img = _renderer.createElement("img");
@@ -49,8 +51,20 @@ export class DeleteDirective {
       }, this.id).subscribe(data => {
         $(td.parentElement).fadeOut(2000, () => {
           this.callBack.emit();//Fadeout yani silme animasyonu bittikten sonra output ile yakaladığımız tablo güncelleme fonksiyonunu başlat.
+          this.alertify.message("Ürün başarıyla silindi", {
+            dismissOthers: true,
+            messageType: MessageType.Success,
+            position: Position.TopRight
+          })
         });
-      })
+      }, (errorResponse: HttpErrorResponse) => {
+        this.spinner.hide(SpinnerType.SquareJellyBox);
+        this.alertify.message("Beklenmeyen hata!", {
+          dismissOthers: true,
+          messageType: MessageType.Error,
+          position: Position.TopRight
+        })
+      });
     });
   }
 
