@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { SpinnerType } from 'src/app/base/base.component';
 import { DeleteDialogComponent, DeleteState } from 'src/app/dialogs/delete-dialog/delete-dialog.component';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
+import { DialogService } from 'src/app/services/common/dialog.service';
 import { HttpClientService } from 'src/app/services/common/http-client.service';
 
 declare var $: any
@@ -17,7 +18,8 @@ export class DeleteDirective {
   constructor(private element: ElementRef, private _renderer: Renderer2, private httpClientService: HttpClientService,
     private spinner: NgxSpinnerService,
     public dialog: MatDialog,
-    private alertify: AlertifyService
+    private alertify: AlertifyService,
+    private dialogService: DialogService
   ) {
     //Bu directiveyi çağıran yerlerde aşağıdaki kodlar çalışacak
     const img = _renderer.createElement("img");
@@ -39,47 +41,51 @@ export class DeleteDirective {
     //Opendialog ile 300px lik uyarı penceresi açıldı. Düğmeye tıklandıktan sonra yani bildirim kapandıktan sonra
     //eğer gelen sonuç yes ise callback fonksiyonu afterClosed çalışacak. Yani aşağıdaki ()=> sonraki kodlar çalışacak. 
     //Eğer iptale tyıklanırsa Close çalışacak. Bunları delete-dialog.component.html den anlıyoruz
-    this.openDialog(async () => {
+    this.dialogService.openDialog({
+      componentType: DeleteDialogComponent,
+      data: DeleteState.Yes,
+      afterClosed: async () => {
 
-      //this.showSpinner(SpinnerType.SquareJellyBox); Bu şekilde yapmamız için bu directive Basecomponent'i extends etmesi lazım
-      //Ama bu solide aykırı. O yüzden direkt spinner üzerinden çalışma yaptık.
-      this.spinner.show(SpinnerType.SquareJellyBox);
+        //this.showSpinner(SpinnerType.SquareJellyBox); Bu şekilde yapmamız için bu directive Basecomponent'i extends etmesi lazım
+        //Ama bu solide aykırı. O yüzden direkt spinner üzerinden çalışma yaptık.
+        this.spinner.show(SpinnerType.SquareJellyBox);
 
-      const td: HTMLTableCellElement = this.element.nativeElement;//Tıklanılan tablo hücresini yakaladık.
-      this.httpClientService.delete({
-        controller: this.controller
-      }, this.id).subscribe(data => {
-        $(td.parentElement).fadeOut(2000, () => {
-          this.callBack.emit();//Fadeout yani silme animasyonu bittikten sonra output ile yakaladığımız tablo güncelleme fonksiyonunu başlat.
-          this.alertify.message("Ürün başarıyla silindi", {
+        const td: HTMLTableCellElement = this.element.nativeElement;//Tıklanılan tablo hücresini yakaladık.
+        this.httpClientService.delete({
+          controller: this.controller
+        }, this.id).subscribe(data => {
+          $(td.parentElement).fadeOut(2000, () => {
+            this.callBack.emit();//Fadeout yani silme animasyonu bittikten sonra output ile yakaladığımız tablo güncelleme fonksiyonunu başlat.
+            this.alertify.message("Ürün başarıyla silindi", {
+              dismissOthers: true,
+              messageType: MessageType.Success,
+              position: Position.TopRight
+            })
+          });
+        }, (errorResponse: HttpErrorResponse) => {
+          this.spinner.hide(SpinnerType.SquareJellyBox);
+          this.alertify.message("Beklenmeyen hata!", {
             dismissOthers: true,
-            messageType: MessageType.Success,
+            messageType: MessageType.Error,
             position: Position.TopRight
           })
         });
-      }, (errorResponse: HttpErrorResponse) => {
-        this.spinner.hide(SpinnerType.SquareJellyBox);
-        this.alertify.message("Beklenmeyen hata!", {
-          dismissOthers: true,
-          messageType: MessageType.Error,
-          position: Position.TopRight
-        })
-      });
-    });
-  }
-
-  openDialog(afterClosed: any): void {
-    const dialogRef = this.dialog.open(DeleteDialogComponent, {
-      width: '300px',
-      data: DeleteState.Yes
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result == DeleteState.Yes) {
-        afterClosed();
       }
-    });
+    })
   }
+
+  // openDialog(afterClosed: any): void {
+  //   const dialogRef = this.dialog.open(DeleteDialogComponent, {
+  //     width: '300px',
+  //     data: DeleteState.Yes
+  //   });
+
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     if (result == DeleteState.Yes) {
+  //       afterClosed();
+  //     }
+  //   });
+  // }
 
 
 
