@@ -12,7 +12,7 @@
       
     </mat-card-content>
     <mat-card-actions>
-      <button mat-button style="background-color: red; color: white; width: 100%;">DELETE</button>
+      <button mat-button style="background-color: red; color: white; width: 100%;" (click)="deleteImage(image.id, $event)" >DELETE</button>
     </mat-card-actions>
   </mat-card>
   
