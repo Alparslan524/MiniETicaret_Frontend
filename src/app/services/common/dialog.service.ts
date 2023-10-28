@@ -1,6 +1,7 @@
+import { ComponentType } from '@angular/cdk/portal';
 import { Injectable } from '@angular/core';
 import { DialogPosition, MatDialog } from '@angular/material/dialog';
-import { ComponentType } from 'ngx-toastr';
+
 
 @Injectable({
   providedIn: 'root'
