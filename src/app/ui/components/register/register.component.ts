@@ -2,7 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent } from 'src/app/base/base.component';
+import { CreateUser } from 'src/app/contracts/Users/create_user';
 import { User } from 'src/app/entities/User';
+import { MessageType } from 'src/app/services/admin/alertify.service';
+import { UserService } from 'src/app/services/common/models/user.service';
+import { CustomToastrService, ToastrMessageType, ToastrPosition } from 'src/app/services/ui/custom-toastr.service';
 
 @Component({
   selector: 'app-register',
@@ -11,7 +15,7 @@ import { User } from 'src/app/entities/User';
 })
 export class RegisterComponent extends BaseComponent implements OnInit {
 
-  constructor(spinner: NgxSpinnerService, private fb: FormBuilder) {
+  constructor(spinner: NgxSpinnerService, private fb: FormBuilder, private userService: UserService, private toastrService: CustomToastrService) {
     super(spinner)
   }
 
@@ -31,10 +35,24 @@ export class RegisterComponent extends BaseComponent implements OnInit {
   }
 
   submitted: boolean = false;
-  onSubmit(data: User) {
-    debugger;
+  async onSubmit(user: User) {
     this.submitted = true;
-
+    if (this.frm.invalid) {
+      return;
+    }
+    const result: CreateUser = await this.userService.create(user);
+    if (result.succeeded) {
+      this.toastrService.message(result.message, "Kullanıcı kaydı başarılı!", {
+        messageType: ToastrMessageType.Success,
+        position: ToastrPosition.TopRight
+      })
+    }
+    else {
+      this.toastrService.message(result.message, "Hata!!", {
+        messageType: ToastrMessageType.Error,
+        position: ToastrPosition.TopRight
+      })
+    }
   }
 
 
