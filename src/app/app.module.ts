@@ -9,6 +9,7 @@ import { AdminModule } from './admin/admin.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { UiModule } from './ui/ui.module';
+import { JwtModule } from '@auth0/angular-jwt';
 
 @NgModule({
   declarations: [
@@ -17,19 +18,23 @@ import { UiModule } from './ui/ui.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    AdminModule,UiModule, 
+    AdminModule, UiModule,
     BrowserAnimationsModule,//Export,import önemli
     ToastrModule.forRoot(),
     NgxSpinnerModule,//Bunu spinner kullanacağımız her yerde import etmemiz gerek. Ama uygulamanın ana modulesinde ve componentinde yazdık.
-                    //Böylelikle her html dosyasında <ngx-spinner></ngx-spinner> yazmamıza gerek yok. Sadece kullanacağımız modulede ctor içine 
-                    //NgxSpinnerService nesnesini oluşturarak .show ile gösterebilirizz
-    HttpClientModule
-  
-  
-  
+    //Böylelikle her html dosyasında <ngx-spinner></ngx-spinner> yazmamıza gerek yok. Sadece kullanacağımız modulede ctor içine 
+    //NgxSpinnerService nesnesini oluşturarak .show ile gösterebilirizz
+    HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: () => localStorage.getItem("accessToken"),
+        allowedDomains:["localhost:7032"]
+      }
+    })
+
   ],
   providers: [
-    {provide: "baseUrl", useValue:"https://localhost:7032/api",multi:true}
+    { provide: "baseUrl", useValue: "https://localhost:7032/api", multi: true }
   ],
   bootstrap: [AppComponent]
 })
