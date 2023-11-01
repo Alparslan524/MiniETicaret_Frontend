@@ -11,7 +11,8 @@ import { LoginModule } from './login/login.module';
 @NgModule({
   declarations: [],
   imports: [
-    CommonModule, ProductsModule, HomeModule, BasketsModule, RegisterModule, LoginModule
+    CommonModule, ProductsModule, HomeModule, BasketsModule, RegisterModule, 
+    // LoginModule LoginComponenti direkt appmoduleye bağladık. Çünkü google giriş işlemleri sadece appmodulede oluyor
   ]
 })
 export class ComponentsModule { }

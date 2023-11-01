@@ -1,9 +1,12 @@
+import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
+import { TokenResponse } from 'src/app/contracts/Token/tokenResponse';
 import { AuthService } from 'src/app/services/common/auth.service';
+import { HttpClientService } from 'src/app/services/common/http-client.service';
 import { UserService } from 'src/app/services/common/models/user.service';
 
 @Component({
@@ -13,8 +16,21 @@ import { UserService } from 'src/app/services/common/models/user.service';
 })
 export class LoginComponent extends BaseComponent implements OnInit {
   constructor(spinner: NgxSpinnerService, private fb: FormBuilder, private userService: UserService,
-    private authService: AuthService, private activatedRoute: ActivatedRoute, private router: Router) {
+    private authService: AuthService, private activatedRoute: ActivatedRoute, private router: Router,
+    private socialAuthService: SocialAuthService) {
     super(spinner)
+
+    socialAuthService.authState.subscribe(async (user: SocialUser) => {
+      this.showSpinner(SpinnerType.SquareJellyBox);
+      switch (user.provider) {
+        case "GOOGLE":
+          await userService.googleLogin(user, () => {
+            this.authService.identityCheck();
+            this.hideSpinner(SpinnerType.SquareJellyBox);
+          })
+          break;
+      }
+    });
   }
 
 
