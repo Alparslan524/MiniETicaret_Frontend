@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate {
         private spinner: NgxSpinnerService) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        this.spinner.show(SpinnerType.SquareJellyBox);
+        
 
         if (!_isAuthenticated) {
             this.router.navigate(["login"], { queryParams: { returnUrl: state.url } });
