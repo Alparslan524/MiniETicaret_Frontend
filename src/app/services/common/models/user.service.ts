@@ -43,8 +43,8 @@ export class UserService {
 
   async googleLogin(user: SocialUser, callBack?: () => void): Promise<any> {
     const observable: Observable<SocialUser | TokenResponse> = await this.httpClientService.post<SocialUser | TokenResponse>({
+      controller: "auth",
       action: "googlelogin",
-      controller: "users",
     }, user)
     const tokenResponse: TokenResponse = await firstValueFrom(observable) as TokenResponse;
     if (tokenResponse) {
