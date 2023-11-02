@@ -2,13 +2,14 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpStatusCode } 
 import { Injectable } from '@angular/core';
 import { Observable, catchError, of } from 'rxjs';
 import { AlertifyService, MessageType, Position } from '../../admin/alertify.service';
+import { UserService } from '../models/user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
 
-  constructor(private alertifyService: AlertifyService) { }
+  constructor(private alertifyService: AlertifyService, private userService: UserService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
@@ -18,6 +19,9 @@ export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
           this.alertifyService.message("Yetkisiz işlem. Bu işlemi yapmaya yetkiniz bulunmamaktadır!", {
             messageType: MessageType.Error,
             position: Position.BottomRight
+          });
+          this.userService.refreshTokenLogin(localStorage.getItem("refreshToken")).then(data => {
+
           });
           break;
         case HttpStatusCode.InternalServerError:
@@ -71,7 +75,7 @@ export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
       }
       return of(error);
     }));
-  
+
   }
-  
+
 }
