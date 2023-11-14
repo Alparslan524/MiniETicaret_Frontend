@@ -22,7 +22,7 @@ export class FileUploadComponent {
     private toastrService: CustomToastrService,
     private dialog: MatDialog,
     private dialogService: DialogService,
-    private spinner : NgxSpinnerService
+    private spinner: NgxSpinnerService
   ) { }
 
   public files: NgxFileDropEntry[];
@@ -60,6 +60,7 @@ export class FileUploadComponent {
               messageType: MessageType.Success,
               position: Position.TopRight
             })
+            this.options.callBack();
           } else {
             this.toastrService.message(messageSuccess, "Başarılı", {
               messageType: ToastrMessageType.Success,
@@ -68,7 +69,7 @@ export class FileUploadComponent {
           }
         }, (errorResponse: HttpErrorResponse) => {//Olumsuz olursa
           const messageError: string = "Dosyalar yüklenirken hata ile karşılaşılmıştır.";
-
+          this.options.callBack();
           if (this.options.isAdminPage == true) {
             this.alertifyService.message(messageError, {
               messageType: MessageType.Error,
@@ -106,5 +107,6 @@ export class FileUploadOptions {
   explanation?: string;
   accept?: string;
   isAdminPage?: boolean = false;//False ise toastr, true ise alertify
+  callBack?: () => void;
 }
 

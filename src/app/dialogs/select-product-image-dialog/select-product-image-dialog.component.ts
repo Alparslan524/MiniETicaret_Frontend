@@ -31,6 +31,10 @@ export class SelectProductImageDialogComponent extends BaseDialog<SelectProductI
 
   async ngOnInit() {
     this.spinner.show(SpinnerType.SquareJellyBox);
+    await this.getImages();
+  }
+
+  async getImages() {
     this.images = await this.productService.readImages(this.data as number, () => this.spinner.hide(SpinnerType.SquareJellyBox));
   }
 
@@ -41,16 +45,23 @@ export class SelectProductImageDialogComponent extends BaseDialog<SelectProductI
       data: DeleteState.Yes,
       afterClosed: async () => {
         this.spinner.show(SpinnerType.SquareJellyBox);
-      await this.productService.deleteImage(this.data as number, imageId, () => {
-      this.spinner.hide(SpinnerType.SquareJellyBox);
+        await this.productService.deleteImage(this.data as number, imageId, () => {
+          this.spinner.hide(SpinnerType.SquareJellyBox);
 
-      var card = $(event.srcElement).parent().parent().parent();
-      card.fadeOut(750);
-    });
+          var card = $(event.srcElement).parent().parent().parent();
+          card.fadeOut(750);
+        });
       }
     });
   }
 
+  async showCase(imageId: number) {
+    this.spinner.show(SpinnerType.SquareJellyBox);
+    this.productService.changeShowcaseImage(imageId, this.data as number, () => {
+      this.spinner.hide(SpinnerType.SquareJellyBox);
+    })
+
+  }
 
   @Output() options: Partial<FileUploadOptions> = {
     accept: ".png, .jpg, .jpeg, .gif",
@@ -58,7 +69,10 @@ export class SelectProductImageDialogComponent extends BaseDialog<SelectProductI
     controller: "products",
     explanation: "Resimleri seçiniz...",
     isAdminPage: true,
-    queryString: `id=${this.data}`
+    queryString: `id=${this.data}`,
+    callBack: async () => {
+      await this.getImages();
+    }
   }
 }
 

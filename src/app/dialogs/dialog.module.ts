@@ -6,6 +6,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { FileUploadModule } from "../services/common/file-upload/file-upload.module";
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { SelectProductImageDialogComponent } from './select-product-image-dialog/select-product-image-dialog.component';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -19,6 +20,7 @@ import { SelectProductImageDialogComponent } from './select-product-image-dialog
         CommonModule,
         MatDialogModule, MatButtonModule, MatCardModule,
         FileUploadModule,
+        FormsModule
     ]
 })
 export class DialogModule { }
