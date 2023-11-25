@@ -21,8 +21,7 @@
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" routerLink="basket">Sepet</a>
             </li>
-  
-            
+
             <li class="nav-item">
               <a class="nav-link active" aria-current="page"  routerLink="register" *ngIf="!authService.isAuthenticated" >Kayıt ol</a>
             </li>
@@ -51,7 +50,4 @@
     <div class="col-md-8"><router-outlet></router-outlet></div>
     <div class="col-md-2"></div>
   </div>
-
-  <ngx-spinner name="ballRunningDots" size="default" type="ball-running-dots"></ngx-spinner>
-  <ngx-spinner name="lineScale" size="default" type="line-scale"></ngx-spinner>
   <ngx-spinner name="squareJellyBox" size="default" type="square-jelly-box"><p style="color: white" > Yükleniyor... </p></ngx-spinner>

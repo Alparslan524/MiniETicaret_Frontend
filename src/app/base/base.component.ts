@@ -9,7 +9,7 @@ export class BaseComponent {
 
   showSpinner(spinnerType: SpinnerType) {
     this.spinner.show(spinnerType);
-    setTimeout(() => this.hideSpinner(spinnerType), 3000);
+    setTimeout(() => this.hideSpinner(spinnerType), 10000);
   }
 
   hideSpinner(spinnerType: SpinnerType) {
@@ -20,7 +20,5 @@ export class BaseComponent {
 
 
 export enum SpinnerType {
-  BallRunningDots = "ballRunningDots",
-  SquareJellyBox = "squareJellyBox",
-  LineScale = "lineScale"
+  SquareJellyBox = "squareJellyBox"
 }

@@ -1,21 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OrdersComponent } from './orders.component';
 import { RouterModule } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { PasswordResetComponent } from './password-reset.component';
 
 
 
 @NgModule({
   declarations: [
-    OrdersComponent
+    PasswordResetComponent
   ],
   imports: [
     CommonModule,
     RouterModule.forChild([
-      { path: "", component: OrdersComponent }
-    ]),
-    MatButtonModule
+      { path: "", component: PasswordResetComponent }
+    ])
   ]
 })
-export class OrdersModule { }
+export class PasswordResetModule { }
