@@ -7,6 +7,8 @@ import { FileUploadModule } from "../services/common/file-upload/file-upload.mod
 import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { SelectProductImageDialogComponent } from './select-product-image-dialog/select-product-image-dialog.component';
 import { FormsModule } from '@angular/forms';
+import { AuthorizeMenuDialogComponent } from './authorize-menu-dialog/authorize-menu-dialog.component';
+import { MatBadgeModule } from '@angular/material/badge';
 
 
 
@@ -14,11 +16,12 @@ import { FormsModule } from '@angular/forms';
 @NgModule({
     declarations: [
         DeleteDialogComponent,
-        SelectProductImageDialogComponent
+        SelectProductImageDialogComponent,
+        AuthorizeMenuDialogComponent
     ],
     imports: [
         CommonModule,
-        MatDialogModule, MatButtonModule, MatCardModule,
+        MatDialogModule, MatButtonModule, MatCardModule, MatBadgeModule,
         FileUploadModule,
         FormsModule
     ]
