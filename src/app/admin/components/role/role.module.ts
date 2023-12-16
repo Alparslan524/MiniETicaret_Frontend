@@ -1,3 +1,4 @@
+import { DialogModule } from '@angular/cdk/dialog';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,41 +9,27 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
-import { DialogModule } from 'src/app/dialogs/dialog.module';
-import { DeleteDirective } from 'src/app/directives/admin/delete.directive';
-import { FileUploadModule } from 'src/app/services/common/file-upload/file-upload.module';
+import { DeleteDirectiveModule } from 'src/app/directives/admin/delete.directive.module';
 import { CreateComponent } from './create/create.component';
 import { ListComponent } from './list/list.component';
-import { ProductsComponent } from './products.component';
-import { DeleteDirectiveModule } from 'src/app/directives/admin/delete.directive.module';
-
-
+import { RoleComponent } from './role.component';
 
 
 
 @NgModule({
   declarations: [
-    ProductsComponent,
+    RoleComponent,
     CreateComponent,
     ListComponent,
   ],
   imports: [
     CommonModule,
     RouterModule.forChild([
-      { path: "", component: ProductsComponent }
+      { path: "", component: RoleComponent }
     ]),
-    MatSidenavModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatDialogModule,
-    FileUploadModule,
+    MatSidenavModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatTableModule, MatPaginatorModule, MatDialogModule,
     DialogModule,
     DeleteDirectiveModule
   ]
 })
-export class ProductsModule { }
-//Products modulenin içinde tanımlı olan componentler içersinde (declarations => ProductsComponent,CreateComponent,ListComponent)
-//import içersinideki moduleleri istediğin gibi kullanabilirsin.
+export class RoleModule { }

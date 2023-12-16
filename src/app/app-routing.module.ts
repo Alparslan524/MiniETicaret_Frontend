@@ -13,7 +13,8 @@ const routes: Routes = [
       { path: "products", loadChildren: () => import("./admin/components/products/products.module").then(module => module.ProductsModule), canActivate: [AuthGuard] },
       { path: "orders", loadChildren: () => import("./admin/components/orders/orders.module").then(module => module.OrdersModule), canActivate: [AuthGuard] },
       { path: "authorize-menu", loadChildren: () => import("./admin/components/authorize-menu/authorize-menu.module").then(module => module.AuthorizeMenuModule), canActivate: [AuthGuard] },
-      
+      { path: "roles", loadChildren: () => import("./admin/components/role/role.module").then(module => module.RoleModule), canActivate: [AuthGuard] },
+
       //www.xxx.com/admin/customers dediğimizde CustomersModule gelicek ve 
       //CustomersModule içinde de CustomerComponent tetiklediğimiz için CustomerComponents gelicek
     ], canActivate: [AuthGuard]

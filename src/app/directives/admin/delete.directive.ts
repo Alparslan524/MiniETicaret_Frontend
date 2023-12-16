@@ -56,7 +56,7 @@ export class DeleteDirective {
         }, this.id).subscribe(data => {
           $(td.parentElement).fadeOut(2000, () => {
             this.callBack.emit();//Fadeout yani silme animasyonu bittikten sonra output ile yakaladığımız tablo güncelleme fonksiyonunu başlat.
-            this.alertify.message("Ürün başarıyla silindi", {
+            this.alertify.message("Başarıyla silindi", {
               dismissOthers: true,
               messageType: MessageType.Success,
               position: Position.TopRight
