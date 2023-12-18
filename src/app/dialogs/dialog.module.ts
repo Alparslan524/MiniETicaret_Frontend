@@ -9,6 +9,7 @@ import { SelectProductImageDialogComponent } from './select-product-image-dialog
 import { FormsModule } from '@angular/forms';
 import { AuthorizeMenuDialogComponent } from './authorize-menu-dialog/authorize-menu-dialog.component';
 import { MatBadgeModule } from '@angular/material/badge';
+import {MatListModule} from '@angular/material/list';
 
 
 
@@ -21,7 +22,7 @@ import { MatBadgeModule } from '@angular/material/badge';
     ],
     imports: [
         CommonModule,
-        MatDialogModule, MatButtonModule, MatCardModule, MatBadgeModule,
+        MatDialogModule, MatButtonModule, MatCardModule, MatBadgeModule, MatListModule,
         FileUploadModule,
         FormsModule
     ]
