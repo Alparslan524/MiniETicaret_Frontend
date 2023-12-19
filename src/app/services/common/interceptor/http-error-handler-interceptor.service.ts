@@ -21,7 +21,10 @@ export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
             position: Position.BottomRight
           });
           this.userService.refreshTokenLogin(localStorage.getItem("refreshToken")).then(data => {
-
+            this.alertifyService.message("Yetkisiz işlem. Bu işlemi yapmaya yetkiniz bulunmamaktadır!", {
+              messageType: MessageType.Error,
+              position: Position.BottomRight
+            });
           });
           break;
         case HttpStatusCode.InternalServerError:

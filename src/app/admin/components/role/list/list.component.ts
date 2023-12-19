@@ -32,7 +32,7 @@ export class ListComponent extends BaseComponent implements OnInit {
     const allRoles: { datas: List_Role[], totalRoleCount: number } = await this.roleService.getRoles(this.paginator ? this.paginator.pageIndex : 0,
       this.paginator ? this.paginator.pageSize : 5,//paginator yok ise default değerler, var ise paginator değerleri
       () => this.hideSpinner(SpinnerType.SquareJellyBox),
-      errorMessage => this.alertifyService.message(errorMessage, {
+      errorMessage => this.alertifyService.message(errorMessage.message, {
         dismissOthers: true,
         messageType: MessageType.Error,
         position: Position.TopRight
