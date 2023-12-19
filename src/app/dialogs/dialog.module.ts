@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthorizeMenuDialogComponent } from './authorize-menu-dialog/authorize-menu-dialog.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import {MatListModule} from '@angular/material/list';
+import { AuthorizeUserDialogComponent } from './authorize-user-dialog/authorize-user-dialog.component';
 
 
 
@@ -18,7 +19,8 @@ import {MatListModule} from '@angular/material/list';
     declarations: [
         DeleteDialogComponent,
         SelectProductImageDialogComponent,
-        AuthorizeMenuDialogComponent
+        AuthorizeMenuDialogComponent,
+        AuthorizeUserDialogComponent
     ],
     imports: [
         CommonModule,

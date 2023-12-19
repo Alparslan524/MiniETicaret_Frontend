@@ -5,6 +5,7 @@ import { CustomersModule } from './customers/customers.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { OrdersModule } from './orders/orders.module';
 import { ProductsModule } from './products/products.module';
+import { UserModule } from './user/user.module';
 
 
 
@@ -13,7 +14,7 @@ import { ProductsModule } from './products/products.module';
   ],
   imports: [
     CommonModule,
-    ProductsModule, OrdersModule, CustomersModule, DashboardModule, AuthorizeMenuModule,
+    ProductsModule, OrdersModule, CustomersModule, DashboardModule, AuthorizeMenuModule, UserModule,
   ]
 })
 export class ComponentsModule { }
